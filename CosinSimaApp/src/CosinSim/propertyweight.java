@@ -1,21 +1,20 @@
 package CosinSim;
-import java.io.BufferedReader;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 
-
-public class main {
+public class propertyweight {
 	static TreeMap<String, Property> map = new TreeMap<String, Property>();
 	static int noTotalOccurances = 0; 
-	public static void main(String[] args) throws IOException {
-		
-		FileExits();
 
-	  }
 	public static HashMap<String, Double> PropertyWeights (String file1, String file2) throws IOException
 	{
 		readDataSet1(file1);
@@ -239,20 +238,5 @@ public class main {
 		    bufferedReader.close();
 		    return lines.toArray(new String[lines.size()]);
 		}
-  
-		
-		//This function first check if it is out put results from before and will delete them before running the app and then read the directory for input dataset
-		public static void FileExits() throws IOException {
-		    
-			//Reading the N3 Dataset Path
-			    		 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			    	    System.out.print("Enter the PATH of your First Dataset: ");
-			    	        String dataPath = br.readLine();    	
-			    	readDataSet1(dataPath);
-			    	 BufferedReader br2 = new BufferedReader(new InputStreamReader(System.in));
-			    	    System.out.print("Enter the PATH of your Second Dataset: ");
-			    	        String dataPath2 = br2.readLine(); 
-			    	        readDataSet2(dataPath2);
-			    	
-			    }
+
 }
