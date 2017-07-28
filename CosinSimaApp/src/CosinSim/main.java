@@ -200,10 +200,7 @@ public class main {
 		
 	}
 
-	public static void readDataSet2(Instance instance1,Instance instance2) throws IOException {
 	
-		
-	}
 	//"C:\Users\rosha\OneDrive\Documents\db\museum_redNoBAL"
 	//C:\Users\rosha\OneDrive\Documents\db\museum
 			
