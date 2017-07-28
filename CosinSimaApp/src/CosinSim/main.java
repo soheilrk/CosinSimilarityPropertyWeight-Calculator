@@ -98,6 +98,9 @@ public class main {
 		System.out.println(mapInstanceProperties.get("<http://dbpedia.org/resource/Akron_Art_Museum>").size());
 		System.out.println(mapInstanceNoOfTypes.get("<http://dbpedia.org/resource/Akron_Art_Museum>"));
 		
+		
+		//Third HashMap including the Property namme from the Fist MapTree and totalNumber of types that it in DBpedia***********************************************
+		
 		HashMap<String, Integer> noTypesPerProperties = new HashMap<String, Integer>();
 		
 		int ntypesDBP = 0;
@@ -122,7 +125,10 @@ public class main {
 					{
 					if (instPropsEntry.getValue()!=null && instPropsEntry.getValue().contains(entry.getKey()))
 					{
-						value += mapInstanceNoOfTypes.get(instPropsEntry.getKey())==null?0:mapInstanceNoOfTypes.get(instPropsEntry.getKey());
+						value += mapInstanceNoOfTypes.get(instPropsEntry.getKey())==null?
+									0:
+									(mapInstanceNoOfTypes.get(instPropsEntry.getKey())==null?
+											0:mapInstanceNoOfTypes.get(instPropsEntry.getKey()));
 					}
 					}
 					catch (Exception ex)
@@ -149,10 +155,83 @@ public class main {
 		System.out.println(noTypesPerProperties);
 		System.out.println(ntypesDBP);
 
-//"C:\Users\rosha\OneDrive\Documents\db\museum_redNoBAL"
-//C:\Users\rosha\OneDrive\Documents\db\museum
+		//PropertyWeighCalculation*****************************************************************************************************************************
+		HashMap<String, Double> weightPerProperty = new HashMap<String, Double>();
+
+		double propertyWeight = 0, totalWeight = 0;
+		int foundProps = 0;
+		Iterator propIt = map.entrySet().iterator();
+		
+		ArrayList<String> notFoundProps = new ArrayList<String>();
+		
+		while(propIt.hasNext())
+		{
+			
+			Map.Entry<String, Property> entry = (Entry<String, Property>) propIt.next();
+
+			try
+			{
+				if(noTypesPerProperties.get(entry.getKey())!=0)
+				{
+					foundProps++;
+					propertyWeight = ((Math.log(entry.getValue().occurances)/Math.log(2))/(Math.log(noTotalOccurances)/Math.log(2)))/((Math.log(noTypesPerProperties.get(entry.getKey()))/Math.log(2))/(Math.log(ntypesDBP)/Math.log(2)));
+					totalWeight += propertyWeight;
+					weightPerProperty.put(entry.getKey(), propertyWeight);
+
+				}
+				else
+				{
+					notFoundProps.add(entry.getKey());
+				}
+				
+
+			}
+			catch (Exception exeption)
+			{
+				throw exeption;
+			}
+		}
+		
+		double averageWeight = totalWeight / foundProps;
+		
+		for (String prop : notFoundProps) weightPerProperty.put(prop, averageWeight);
+		
+		System.out.println("Property Weight= " + weightPerProperty);
 		
 	}
+
+	public static void readDataSet2(Instance instance1,Instance instance2) throws IOException {
+	
+		
+	}
+	//"C:\Users\rosha\OneDrive\Documents\db\museum_redNoBAL"
+	//C:\Users\rosha\OneDrive\Documents\db\museum
+			
+		
+		
+
+		//Calculating the Weight of Prperties weight_prop_i = log2(nprop_i) / log2(nprops)   /   (log2(ntypesdbp(prop_i) / log2(ntypesdbp)),
+		//
+//				double propertyWeight = 0;
+//				Set<Map.Entry<String, Integer>> entrySet = noTypesPerProperties.entrySet();
+//				for (Entry<String, Integer> propEnty: entrySet){
+//					
+//					propertyWeight = (Math.log(map.get(propEnty.getKey()).occurances)/Math.log(noTotalOccurances))/(Math.log(noTypesPerProperties.get(propEnty.getKey()))/Math.log(ntypesDBP));
+//					
+//				}
+//				System.out.println(propertyWeight);}
+
+//				double propertyWeight = 0;
+//				Set<Map.Entry<String, Property>> entrySet = map.entrySet();
+//				for (Entry<String, Property> propEnty: entrySet){
+//					
+//					propertyWeight = (Math.log(propEnty.getValue().occurances)/Math.log(noTotalOccurances))/(Math.log(noTypesPerProperties.get(propEnty))/Math.log(ntypesDBP));
+//					
+//				}
+//				System.out.println(propertyWeight);
+
+		
+	
 
 	
 	//Readlines Function is used to read the input file line by line 
