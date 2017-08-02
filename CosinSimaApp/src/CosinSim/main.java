@@ -8,8 +8,13 @@ import java.util.*;
 import java.util.Map.Entry;
 
 
+
+
 public class main {
 	static TreeMap<String, Property> map = new TreeMap<String, Property>();
+	static TreeMap<String, InstancePropertiesIsTyped> instanceListPropertiesTreeMap = new TreeMap<String, InstancePropertiesIsTyped>();
+	static HashMap<String, Double> WeightsForEachProperty = new HashMap<String, Double>();
+	static List<String> listOfInstances = new ArrayList<String>();
 	static int noTotalOccurances = 0; 
 	public static void main(String[] args) throws IOException {
 		
@@ -32,9 +37,40 @@ public class main {
 		for (String line : data){
 			String[] s = line.split(" ");
 			if (s.length<3) continue;
-			if (s[1].contains("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>")) continue;
+			String instancemapKey = s[0];
+			if (!listOfInstances.contains(instancemapKey)) listOfInstances.add(instancemapKey);
+			if (s[1].contains("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>")) 
+				{
+					InstancePropertiesIsTyped instanceProperties = null;
+					if (instanceListPropertiesTreeMap.get(instancemapKey)== null){
+						instanceProperties = new InstancePropertiesIsTyped("", true);
+					}
+					else if (instanceListPropertiesTreeMap.get(instancemapKey)!=null)
+					{
+						instanceProperties = instanceListPropertiesTreeMap.get(instancemapKey);
+						
+						instanceProperties.isTyped = true;
+					}
+					instanceListPropertiesTreeMap.put(instancemapKey,instanceProperties);
+					continue;
+				}
 			
 			noTotalOccurances++;
+			//insert to the instanceListProperties Treemap
+			InstancePropertiesIsTyped instanceProperties = null;
+			if (instanceListPropertiesTreeMap.get(instancemapKey)== null){
+				instanceProperties = new InstancePropertiesIsTyped(s[1], false);
+			}
+			else if (instanceListPropertiesTreeMap.get(instancemapKey)!=null)
+			{
+				instanceProperties = instanceListPropertiesTreeMap.get(instancemapKey);
+				
+				instanceProperties.propertySet.add(s[1]);
+			}
+			
+			instanceListPropertiesTreeMap.put(instancemapKey,instanceProperties);
+			
+			//********************insert to the map Treemap
 			String mapkey = s[1];
 			//check if the propertyname was in out TreeMap before or not
 			if (map.get(mapkey)== null){
@@ -49,7 +85,8 @@ public class main {
 			
 
 	}
-		
+		System.out.println(instanceListPropertiesTreeMap.get("<http://dbpedia.org/resource/Geffrye_Museum>").propertySet);
+
 //		System.out.println(map.get("<http://dbpedia.org/ontology/abstract>").propertyName);
 //		System.out.println(map.size());
 		
@@ -95,7 +132,7 @@ public class main {
 		
 		//Third HashMap including the Property namme from the Fist MapTree and totalNumber of types that it in DBpedia***********************************************
 		
-		HashMap<String, Integer> noTypesPerProperties = new HashMap<String, Integer>();
+		HashMap<String, Integer> noTypesPerProperties = new HashMap<String, Integer>(map.size());
 		
 		int ntypesDBP = 0;
 		Iterator mapIt = map.entrySet().iterator();
@@ -193,7 +230,106 @@ public class main {
 		System.out.println("Property Weight= " + weightPerProperty);
 		
 		return weightPerProperty;
+	}
 		
+		
+		//*********************************************Calculating Cosin Similarity****************************************************************
+//
+		 public static double similarity(String instance1, String instance2) {
+
+	            double instance1TotalWeight1 = 0;
+	            double instance1TotalWeight2 = 0;
+
+	            double powerWeight1=0;
+	            double powerWeight2=0;
+	            double powerCommon =0;
+	    		TreeSet<String> instance1Properties= instanceListPropertiesTreeMap.get(instance1).propertySet;
+	    		TreeSet<String> instance2Properties= instanceListPropertiesTreeMap.get(instance2).propertySet;
+	    		int sizeListProperty1=instance1Properties.size();
+	    		int sizeListProperty2=instance2Properties.size();
+	    		
+   		
+
+	            String lastInstance1Prop;
+	            try
+	            {
+	                if((instance1Properties.isEmpty())&& (instance2Properties.isEmpty()))
+	                    return 1;
+	                    
+
+	                    for(String prop1: instance1Properties){
+	                    	
+	                    	double weight = 0;
+	                    	if (WeightsForEachProperty.get(prop1)!=null)
+	                    		 weight= WeightsForEachProperty.get(prop1);
+	            		  
+	                    	powerWeight1 += weight*weight;
+	            		  
+	                    	boolean found = false;
+	            		   
+	                    	for(String prop2: instance2Properties){
+
+	            			   if (prop2 == prop1)
+	            			   {
+	            				   found = true;
+	            				   break;
+	            			   }
+	            		   }
+	                    		   
+	            		   powerCommon += weight*weight;
+	                    }
+	                    
+	                    instance1TotalWeight1 = Math.sqrt(powerWeight1);
+
+	                	   for(String prop2: instance2Properties){
+	                		   
+	                       	double weight = 0;
+	                	    	if (WeightsForEachProperty.get(prop2)!=null)
+	                	    		 weight= WeightsForEachProperty.get(prop2);
+	                	    		  powerWeight2 += weight*weight;
+	                	    }
+	                	   instance1TotalWeight2= Math.sqrt(powerWeight2);
+	                    
+	                    double similarity = (double) powerCommon / ((double) instance1TotalWeight1*instance1TotalWeight2);
+	                    return similarity;
+	                    	            	
+	            }
+	            catch(Exception ex)
+	            {
+	            	throw ex;
+	            }
+	            
+		 }
+
+	      
+
+	
+	public static void SymmetricMatrixProgram()
+	{
+     int n = instanceListPropertiesTreeMap.size();
+     double matrix[][] = new double[n][n];
+     
+		for (int i = 0; i < n; i++)
+          {
+              for (int j = i; j < n; j++)
+              {
+            	  
+            	  String instance1 = listOfInstances.get(i);
+            	  String instance2= listOfInstances.get(j);
+               matrix[i][j] = similarity(instance1, instance2);
+            }
+         }
+		for (int i = 0; i < n; i++)
+        {
+            for (int j = i; j < n; j++)
+            {
+          	  
+          	        System.out.print(matrix[i][j]+","); 
+          	        
+          }
+            System.out.println();
+       }
+
 	}
 
 	
@@ -252,7 +388,8 @@ public class main {
 			    	 BufferedReader br2 = new BufferedReader(new InputStreamReader(System.in));
 			    	    System.out.print("Enter the PATH of your Second Dataset: ");
 			    	        String dataPath2 = br2.readLine(); 
-			    	        readDataSet2(dataPath2);
+			    	        WeightsForEachProperty = readDataSet2(dataPath2);
+			    	        SymmetricMatrixProgram();
 			    	
 			    }
 }
