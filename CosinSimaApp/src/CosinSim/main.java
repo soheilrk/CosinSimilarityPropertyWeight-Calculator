@@ -248,8 +248,17 @@ public class main {
 	    		int sizeListProperty1=instance1Properties.size();
 	    		int sizeListProperty2=instance2Properties.size();
 	    		
-   		
-
+	    		if (sizeListProperty1>sizeListProperty2)
+	    		{
+	    			TreeSet<String> tempTreeSet = instance1Properties;
+	    			
+	    			instance1Properties = instance2Properties;
+	    			
+	    			instance2Properties = tempTreeSet;
+	    			
+	    			//tempTreeSet.clear();
+	    		}
+	    		
 	            String lastInstance1Prop;
 	            try
 	            {
@@ -269,14 +278,14 @@ public class main {
 	            		   
 	                    	for(String prop2: instance2Properties){
 
-	            			   if (prop2 == prop1)
+	            			   if (prop2.contains(prop1))
 	            			   {
 	            				   found = true;
 	            				   break;
 	            			   }
 	            		   }
 	                    		   
-	            		   powerCommon += weight*weight;
+	            		   if (found) powerCommon += weight*weight;
 	                    }
 	                    
 	                    instance1TotalWeight1 = Math.sqrt(powerWeight1);
