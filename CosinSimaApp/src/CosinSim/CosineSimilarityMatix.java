@@ -40,10 +40,13 @@ public double[][] CosineSimilarity (String file1, String file2) throws IOExcepti
 //function to read the first dataset
 public static void readDataSet1(String N3DataSet) throws IOException {
 	
-	String[] data = readLines(N3DataSet);
-	
-	//TreeMap<String, Integer>map = new TreeMap<String, Integer>();
-	for (String line : data){
+    FileReader fileReader = new FileReader(N3DataSet);
+    BufferedReader bufferedReader = new BufferedReader(fileReader);
+    //List<String> lines = new ArrayList<String>();
+    String line = null;
+    int id =-1;
+    while ((line = bufferedReader.readLine()) != null) {
+        //lines.add(line);
 		String[] s = line.split(" ");
 		if (s.length<3) continue;
 		String instancemapKey = s[0];
@@ -52,7 +55,7 @@ public static void readDataSet1(String N3DataSet) throws IOException {
 			{
 				InstancePropertiesIsTyped instanceProperties = null;
 				if (instanceListPropertiesTreeMap.get(instancemapKey)== null){
-					instanceProperties = new InstancePropertiesIsTyped("", true);
+					instanceProperties = new InstancePropertiesIsTyped("", true,++id);
 				}
 				else if (instanceListPropertiesTreeMap.get(instancemapKey)!=null)
 				{
@@ -68,7 +71,7 @@ public static void readDataSet1(String N3DataSet) throws IOException {
 		//insert to the instanceListProperties Treemap
 		InstancePropertiesIsTyped instanceProperties = null;
 		if (instanceListPropertiesTreeMap.get(instancemapKey)== null){
-			instanceProperties = new InstancePropertiesIsTyped(s[1], false);
+			instanceProperties = new InstancePropertiesIsTyped(s[1], false,++id);
 		}
 		else if (instanceListPropertiesTreeMap.get(instancemapKey)!=null)
 		{
@@ -90,10 +93,16 @@ public static void readDataSet1(String N3DataSet) throws IOException {
 			Property value=map.get(mapkey);
 			 value.occurances++ ;
 			map.put(mapkey,value);
-		}
-		
+		}    	
+    	
+    }
+    bufferedReader.close();
+    //return lines.toArray(new String[lines.size()]);
+    
+	//String[] data = readLines(N3DataSet);
+	
+	//TreeMap<String, Integer>map = new TreeMap<String, Integer>();
 
-}
 	System.out.println(instanceListPropertiesTreeMap.get("<http://dbpedia.org/resource/Geffrye_Museum>").propertySet);
 
 //	System.out.println(map.get("<http://dbpedia.org/ontology/abstract>").propertyName);
@@ -103,12 +112,17 @@ public static void readDataSet1(String N3DataSet) throws IOException {
 	
 public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOException {
 	
-	String[] data = readLines(N3DataSet);
 	TreeMap<String, List<String>> mapInstanceProperties = new TreeMap<String, List<String>>();
 	TreeMap<String, Integer> mapInstanceNoOfTypes = new TreeMap<String, Integer>();
-
+    FileReader fileReader = new FileReader(N3DataSet);
+    BufferedReader bufferedReader = new BufferedReader(fileReader);
+    //List<String> lines = new ArrayList<String>();
 	int typeCount = 0;
-	for (String line : data){
+    String line = null;
+    while ((line = bufferedReader.readLine()) != null) {
+        //lines.add(line);
+		if (typeCount % 100 ==0)
+				System.out.println(typeCount);
 		String[] s = line.split(" ");
 		
 		if (s.length<3) continue;
@@ -131,11 +145,19 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 			lisOfPropertiesPerInstance.add(s[1]);
 		}
 		mapInstanceProperties.put(mapkey,lisOfPropertiesPerInstance);
-		
-		}
+    
+    }
+    bufferedReader.close();
+    //return lines.toArray(new String[lines.size()]);
+    
+	//String[] data = readLines(N3DataSet);
+
+//	for (String line : data){
+//		
+//	}
     System.out.println(typeCount);
 	
-	System.out.println(mapInstanceProperties.get("<http://dbpedia.org/resource/Akron_Art_Museum>").size());
+	//System.out.println(mapInstanceProperties.get("<http://dbpedia.org/resource/Akron_Art_Museum>").size());
 	System.out.println(mapInstanceNoOfTypes.get("<http://dbpedia.org/resource/Akron_Art_Museum>"));
 	
 	
