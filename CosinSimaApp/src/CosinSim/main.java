@@ -1,12 +1,12 @@
 package CosinSim;
 import java.io.BufferedReader;
-
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.Collections;
 
 
 
@@ -18,7 +18,7 @@ public class main {
 	static HashMap<String, Double> WeightsForEachProperty = new HashMap<String, Double>();
 	static List<String> listOfInstances = new ArrayList<String>();
 	static int noTotalOccurances = 0; 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		
 		FileExits();
 
@@ -96,8 +96,8 @@ public static void readDataSet1(String N3DataSet) throws IOException {
 	
 	//TreeMap<String, Integer>map = new TreeMap<String, Integer>();
 
-	System.out.println("List Properties for the instance <http://dbpedia.org/resource/BMW_Museum>=  "+instanceListPropertiesTreeMap.get("<http://dbpedia.org/resource/BMW_Museum>").propertySet);
-	System.out.println("The TreeMap Including properties and number of accurances in this case for <http://www.w3.org/2002/07/owl#sameAs>= "+map.get("<http://www.w3.org/2002/07/owl#sameAs>").occurances);
+	System.out.println("List Properties for the instance <http://dbpedia.org/resource/Akron_Art_Museum>=  "+instanceListPropertiesTreeMap.get("<http://dbpedia.org/resource/Akron_Art_Museum>").propertySet.size());
+//	System.out.println("The TreeMap Including properties and number of accurances in this case for <http://www.w3.org/2002/07/owl#sameAs>= "+map.get("<http://www.w3.org/2002/07/owl#sameAs>").occurances);
 //	System.out.println(map.get("<http://dbpedia.org/ontology/abstract>").propertyName);
 //	System.out.println(map.size());
 	
@@ -152,49 +152,49 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 //		
 //	}
     
-	TreeMap<String, Integer> mapTop5InstanceNoOfTypes = new TreeMap<String, Integer>();
-	
-	for(Map.Entry<String, Integer> entryValue: mapInstanceNoOfTypes.entrySet())
-	{
-		if (mapTop5InstanceNoOfTypes.size()<5)
-			
-			mapTop5InstanceNoOfTypes.put(entryValue.getKey(), entryValue.getValue());
+//	TreeMap<String, Integer> mapTop5InstanceNoOfTypes = new TreeMap<String, Integer>();
+//	
+//	for(Map.Entry<String, Integer> entryValue: mapInstanceNoOfTypes.entrySet())
+//	{
+//		if (mapTop5InstanceNoOfTypes.size()<5)
+//			
+//			mapTop5InstanceNoOfTypes.put(entryValue.getKey(), entryValue.getValue());
+//		
+//		else
+//		{
+//			Map.Entry<String, Integer>  minEntry =mapTop5InstanceNoOfTypes.firstEntry();
+//			for(Map.Entry<String, Integer> entry5: mapTop5InstanceNoOfTypes.entrySet())
+//			{
+//				if(entry5.getValue()<minEntry.getValue())		
+//					minEntry = entry5;
+//				
+//			}
+//			
+//			if (entryValue.getValue()>minEntry.getValue())
+//			{
+//				mapTop5InstanceNoOfTypes.remove(minEntry.getKey());
+//				
+//				mapTop5InstanceNoOfTypes.put(entryValue.getKey(), entryValue.getValue());
+//			}	
+//			
+//		}
+//		
+//	}
 		
-		else
-		{
-			Map.Entry<String, Integer>  minEntry =mapTop5InstanceNoOfTypes.firstEntry();
-			for(Map.Entry<String, Integer> entry5: mapTop5InstanceNoOfTypes.entrySet())
-			{
-				if(entry5.getValue()<minEntry.getValue())		
-					minEntry = entry5;
-				
-			}
-			
-			if (entryValue.getValue()>minEntry.getValue())
-			{
-				mapTop5InstanceNoOfTypes.remove(minEntry.getKey());
-				
-				mapTop5InstanceNoOfTypes.put(entryValue.getKey(), entryValue.getValue());
-			}	
-			
-		}
-		
-	}
-		
-	System.out.println(mapTop5InstanceNoOfTypes);
-	System.out.println("Average Number of Types = "+ typeCount/mapInstanceNoOfTypes.size());
-	System.out.println(mapInstanceNoOfTypes.size());
-	System.out.println(mapInstanceProperties.size());
-	System.out.println(mapInstanceNoOfTypes);
+//	System.out.println(mapTop5InstanceNoOfTypes);
+//	System.out.println("Average Number of Types = "+ typeCount/mapInstanceNoOfTypes.size());
+//	System.out.println(mapInstanceNoOfTypes.size());
+//	System.out.println(mapInstanceProperties.size());
+//	System.out.println(mapInstanceNoOfTypes);
 	
 
     
-    System.out.println("total Number of types in DBpedia = "+typeCount);
+   // System.out.println("total Number of types in DBpedia = "+typeCount);
 //    System.out.println(mapInstanceNoOfTypes.);
 	
 	//System.out.println(mapInstanceProperties.get("<http://dbpedia.org/resource/Akron_Art_Museum>").size());
-	System.out.println("Number of types for the instance <http://dbpedia.org/resource/BMW_Museum> in DBpedia = "+mapInstanceNoOfTypes.get("<http://dbpedia.org/resource/BMW_Museum>"));
-	System.out.println("List of Properties for the instance <http://dbpedia.org/resource/BMW_Museum> in DBpedia = "+mapInstanceProperties.get("<http://dbpedia.org/resource/BMW_Museum>"));
+	//System.out.println("Number of types for the instance <http://dbpedia.org/resource/BMW_Museum> in DBpedia = "+mapInstanceNoOfTypes.get("<http://dbpedia.org/resource/BMW_Museum>"));
+	//System.out.println("List of Properties for the instance <http://dbpedia.org/resource/BMW_Museum> in DBpedia = "+mapInstanceProperties.get("<http://dbpedia.org/resource/BMW_Museum>"));
 
 	
 	
@@ -233,7 +233,7 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 
 					value += nt;
 					
-				//	if (nt>0) System.out.println(String.format("%s : %d", instPropsEntry.getKey(), nt));
+					//if (nt>0) System.out.println(String.format("%s : %d", instPropsEntry.getKey(), nt));
 						
 				}
 				}
@@ -261,9 +261,9 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 	mapInstanceProperties.clear();
 	mapInstanceNoOfTypes.clear();
 	
-	System.out.println("Total number of types that property <http://www.w3.org/2002/07/owl#sameAs> has in DBpedia = "+noTypesPerProperties.get("<http://www.w3.org/2002/07/owl#sameAs>"));
-	System.out.println("Total number of types in DBpedia = " +ntypesDBP);
-	System.out.println("Number of types that property has in DBpedia = "+noTypesPerProperties);
+	//System.out.println("Total number of types that property <http://www.w3.org/2002/07/owl#sameAs> has in DBpedia = "+noTypesPerProperties.get("<http://www.w3.org/2002/07/owl#sameAs>"));
+	//System.out.println("Total number of types in DBpedia = " +ntypesDBP);
+	//System.out.println("Number of types that property has in DBpedia = "+noTypesPerProperties);
 	
 	
 
@@ -326,22 +326,44 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 	
 	//calculating the medium of the property weeights 
 	System.out.println("Property Weight for <http://www.w3.org/2002/07/owl#sameAs> = " + weightPerProperty.get("<http://www.w3.org/2002/07/owl#sameAs>"));
-	System.out.println("Weight per property has in DBpedia = "+ weightPerProperty);
+	//System.out.println("Weight per property has in DBpedia = "+ weightPerProperty);
 	
 	System.out.println("median: "+median);
 //	for (Double propSort : properties) {
 //	    System.out.println("Propety: "+propSort);
 //	}
 	//System.out.println("averageWeight: "+averageWeight);
+	properties.clear();
+//	 TreeSet<String> propsrk = new  TreeSet<String> ();
+//	 ArrayList<Double> propsrklist=new ArrayList<>();
+//	 int i=0;
+//	propsrk=  instanceListPropertiesTreeMap.get("<http://dbpedia.org/resource/Akron_Art_Museum>").propertySet;
+//		System.out.println(propsrk);
+//		for (String p : propsrk){
+//			propsrklist.add(weightPerProperty.get(p));
+//			
+//		System.out.println(p+" = "+propsrklist.get(i++));
+//		
+//		double sum =0;
+//		for (i=0; propsrklist.size()>i ; i++){
+//			sum += propsrklist.get(i)*propsrklist.get(i);
+//		//System.out.println(propsrklist.get(i));
+//		}
+//		double matio=0;
+//		matio= Math.sqrt(sum);
+	//	System.out.println("valueeeee"+matio);
+		//}
 	return weightPerProperty;
 	
-	
+	//"C:\Users\rosha\OneDrive\Documents\db\museum_redNoBAL"
+	//C:\Users\rosha\OneDrive\Documents\db\museum
+  
 }
 	
 		
 		//*********************************************Calculating Cosin Similarity****************************************************************
 //
-		 public static double similarity(String instance1, String instance2) {
+		 public static double similarity(String instance1, String instance2) throws Exception {
 
 	            double instance1TotalWeight1 = 0;
 	            double instance1TotalWeight2 = 0;
@@ -353,7 +375,8 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 	    		TreeSet<String> instance2Properties= instanceListPropertiesTreeMap.get(instance2).propertySet;
 	    		int sizeListProperty1=instance1Properties.size();
 	    		int sizeListProperty2=instance2Properties.size();
-	    		
+	    		ArrayList<Double> powerlist = new ArrayList<Double>();
+
 	    		if (sizeListProperty1>sizeListProperty2)
 	    		{
 	    			TreeSet<String> tempTreeSet = instance1Properties;
@@ -401,12 +424,21 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 	                       	double weight = 0;
 	                	    	if (WeightsForEachProperty.get(prop2)!=null)
 	                	    		 weight= WeightsForEachProperty.get(prop2);
+	                	    	
 	                	    		  powerWeight2 += weight*weight;
 	                	    }
 	                	   instance1TotalWeight2= Math.sqrt(powerWeight2);
-	                    
+	                	//   System.out.print(powerlist);
 	                    double similarity = (double) powerCommon / ((double) instance1TotalWeight1*instance1TotalWeight2);
-	                    return similarity;
+
+	          	      //  System.out.println("Results: "+instance1+" "+instance2+" "+powerCommon+" /{ "+instance1TotalWeight1+" * "+instance1TotalWeight2+" } ");
+	          	      FileWriter fw = new FileWriter("./outputfile.txt", true);
+	  	    	    BufferedWriter output = new BufferedWriter(fw);
+	  	    	    	output.write( "Results: "+instance1+" "+instance2+" "+powerCommon+" /{ "+instance1TotalWeight1+" * "+instance1TotalWeight2+" } ");
+	  	    	    	output.flush();
+	  	    	    	
+	  	    	    	
+	          	        return similarity;
 	                    	            	
 	            }
 	            catch(Exception ex)
@@ -414,46 +446,16 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 	            	throw ex;
 	            }
 	            
+	            
 		 }
-
+		//"C:\Users\rosha\OneDrive\Documents\db\museum_redNoBAL"
+			//C:\Users\rosha\OneDrive\Documents\db\museum
 	      
 
 	
-	public static void SymmetricMatrixProgram()
-	{
-     int n = instanceListPropertiesTreeMap.size();
-     double matrix[][] = new double[n][n];
-     
-		for (int i = 0; i < n; i++)
-          {
-              for (int j = i; j < n; j++)
-              {
-            	  
-            	  String instance1 = listOfInstances.get(i);
-            	  String instance2= listOfInstances.get(j);
-               matrix[i][j] = similarity(instance1, instance2);
-            }
-         }
-		for (int i = 0; i < n; i++)
-        {
-            for (int j = i; j < n; j++)
-            {
-          	  
-          	        System.out.print(matrix[i][j]+","); 
-          	        
-          }
-            System.out.println();
-       }
-
-	}
-	
-	//Output Similarity Matrix in a File
-//	public static void SymmetricMatrixProgram(String path) throws IOException
+//	public static void SymmetricMatrixProgram()
 //	{
-//		FileWriter fw = new FileWriter(path, true);
-//	    try (BufferedWriter output = new BufferedWriter(fw)) {
 //     int n = instanceListPropertiesTreeMap.size();
-//     String ligne = "";
 //     double matrix[][] = new double[n][n];
 //     
 //		for (int i = 0; i < n; i++)
@@ -471,16 +473,48 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 //            for (int j = i; j < n; j++)
 //            {
 //          	  
-//          	        //System.out.print(matrix[i][j]+","); 
-//            	output.write( listOfInstances.get(i)+" "+listOfInstances.get(j)+" = "+matrix[i][j]+"\n"); 
-//
+//          	        System.out.print(matrix[i][j]+","); 
+//          	        
 //          }
 //            System.out.println();
 //       }
-//		 output.flush();
-//	    }
 //
 //	}
+//	
+	//Output Similarity Matrix in a File
+	public static void SymmetricMatrixProgram(String path) throws Exception
+	{
+		FileWriter fw = new FileWriter(path, true);
+	    try (BufferedWriter output = new BufferedWriter(fw)) {
+     int n = instanceListPropertiesTreeMap.size();
+     String ligne = "";
+     double matrix[][] = new double[n][n];
+     
+		for (int i = 0; i < n; i++)
+          {
+              for (int j = i; j < n; j++)
+              {
+            	  
+            	  String instance1 = listOfInstances.get(i);
+            	  String instance2= listOfInstances.get(j);
+               matrix[i][j] = similarity(instance1, instance2);
+            }
+         }
+		for (int i = 0; i < n; i++)
+        {
+            for (int j = i; j < n; j++)
+            {
+          	  
+          	        //System.out.print(matrix[i][j]+","); 
+            	output.write( listOfInstances.get(i)+" "+listOfInstances.get(j)+" = "+matrix[i][j]+"\n"); 
+
+          }
+            System.out.println();
+       }
+		 output.flush();
+	    }
+
+	}
 
 	
 
@@ -530,7 +564,7 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
   
 		
 		//This function first check if it is out put results from before and will delete them before running the app and then read the directory for input dataset
-		public static void FileExits() throws IOException {
+		public static void FileExits() throws Exception {
 		    
 			//Reading the N3 Dataset Path
 			    		 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -541,7 +575,7 @@ public static HashMap<String, Double> readDataSet2(String N3DataSet) throws IOEx
 			    	    System.out.print("Enter the PATH of your Second Dataset: ");
 			    	        String dataPath2 = br2.readLine(); 
 			    	        WeightsForEachProperty = readDataSet2(dataPath2);
-			    	       SymmetricMatrixProgram();
+			    	      SymmetricMatrixProgram("./b.txt");
 			    	
 			    }
 }
